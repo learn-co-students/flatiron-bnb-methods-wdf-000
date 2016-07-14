@@ -5,8 +5,9 @@ class Reservation < ActiveRecord::Base
 
   validates_presence_of :checkin, :checkout
   validate :guest_cannot_be_host
-  validates_with CustomValidations::ListingDateValidator
- 
+  validate :checkin_before_checkout
+  validate :available
+
   def duration
     (checkout - checkin).to_i  
   end
@@ -18,10 +19,14 @@ class Reservation < ActiveRecord::Base
   private
 
   def guest_cannot_be_host
-    errors.add(:guest_id, "A guest cannot also be the host.") unless guest_id.nil? || guest_id != Listing.find(listing_id).host_id
+    errors.add(:guest_id, "A guest cannot also be the host.") unless guest_id != Listing.find(listing_id).host_id
+  end
+
+  def available
+    errors.add(:checkin, "Sorry, there seems to be an existing reservation at that time.") unless !checkin.nil? && !checkout.nil? && self.listing.reservations.map{|reservation| checkin < reservation.checkout && checkout > reservation.checkin }.none?
   end
 
   def checkin_before_checkout
-    errors.add(:checkin, "Checkin time must be before checkout.") unless Date.parse(checkin) < Date.parse(checkout)
+    errors.add(:checkin, "Checkin time must be before checkout.") unless !checkin.nil? && !checkout.nil? && checkin < checkout
   end
 end

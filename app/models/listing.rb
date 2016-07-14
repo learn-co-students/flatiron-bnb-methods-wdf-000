@@ -11,7 +11,7 @@ class Listing < ActiveRecord::Base
   before_destroy :unmake_host
 
   def average_review_rating
-    (reviews.map{|review| review.rating}.inject{|sum,i| sum + i} / reviews.length).round(1)
+    (reviews.map{|review| review.rating}.inject{|sum,i| sum + i}.to_f / reviews.length.to_f)
   end
 
   private

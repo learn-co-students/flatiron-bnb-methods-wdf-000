@@ -3,7 +3,7 @@ module Stats
     self.all[
       self.all.map do |self_obj|
         num_reservations = self_obj.listings.map{ |listings| listings.reservations.length }.inject(0){|sum,i| sum + i}
-        if self_obj.listings.length == 0 then 0 else num_reservations / self_obj.listings.length end
+        if self_obj.listings.length == 0 then 0 else num_reservations.to_f / self_obj.listings.length.to_f end
       end.each_with_index.max[1]
     ]
   end
