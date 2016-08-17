@@ -6,13 +6,4 @@ class User < ActiveRecord::Base
   has_many :guests, :through => :reservations, :class_name => "User"
   has_many :hosts, :through => :trips, :source => :listing, :class_name => "User"
   has_many :host_reviews, :through => :guests, :source => :reviews
-
-
-  # def guests
-  #   guest_names = []
-  #   reservations.each do |reservation|
-  #     guest_names << reservation.guest
-  #   end
-  #   guest_names
-  # end
 end
