@@ -12,11 +12,13 @@ describe City do
   describe 'instance methods' do
     it 'knows about all the available listings given a date range' do
       expect(City.first.city_openings('2014-05-01', '2014-05-05')).to include(@listing2,@listing3) 
+    
     end 
   end
 
   describe 'class methods' do
     describe ".highest_ratio_res_to_listings" do
+
       it 'knows the city with the highest ratio of reservations to listings' do
         expect(City.highest_ratio_res_to_listings).to eq(City.find_by(:name => "NYC")) 
       end
