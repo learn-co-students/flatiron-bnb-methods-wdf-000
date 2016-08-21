@@ -141,6 +141,8 @@ describe Listing do
           price: "150.00",
           neighborhood: santa_monica,
           host: user)
+
+
         expect(user.reload.host?).to eq(true)
       end
     end
