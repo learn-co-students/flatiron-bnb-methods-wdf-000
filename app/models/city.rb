@@ -5,17 +5,17 @@ class City < ActiveRecord::Base
   def self.highest_ratio_res_to_listings
     ratios = {}
     self.all.each do |city|
-      ratios[city] = ratio_check(city)
+      ratios[city] = reservations(city).to_f / city.listings.count
     end
     ratios.max_by {|k, v| v}.first
   end
 
   def self.most_res
-    reservations = {}
+    res_hash = {}
     City.all.each do |city|
-      reservations[city] = city.listings.collect {|l| l.reservations.count}.reduce(:+)
+      res_hash[city] = reservations(city)
     end
-    reservations.max_by {|k,v| v}.first
+    res_hash.max_by {|k,v| v}.first
   end
 
   # collects listings that dont have conflicts
@@ -28,11 +28,9 @@ class City < ActiveRecord::Base
   private
 
   # do class methods only work with other class methods?
-  # ratio_check fails unless a class method
-  def self.ratio_check(city)
-    listings = city.listings.count
-    reservations = city.listings.collect {|l| l.reservations.count}.reduce(:+)
-    reservations.to_f / listings
+
+  def self.reservations(location)
+    location.listings.collect {|l| l.reservations.count}.reduce(:+)
   end
 
   def reservation_check(listing, start_date, end_date)
