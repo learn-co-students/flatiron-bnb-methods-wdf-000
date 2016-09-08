@@ -11,6 +11,10 @@ class Listing < ActiveRecord::Base
   after_save :toggle_host
   after_destroy :toggle_host
 
+  def average_review_rating
+    self.reviews.average(:rating).to_f
+  end
+
   private
 
   def toggle_host
