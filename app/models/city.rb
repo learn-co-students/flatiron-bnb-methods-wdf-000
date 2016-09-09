@@ -1,4 +1,5 @@
 class City < ActiveRecord::Base
+  include Checkable::InstanceMethods
   has_many :neighborhoods
   has_many :listings, through: :neighborhoods
   # access reservations through listings
@@ -33,12 +34,6 @@ class City < ActiveRecord::Base
 
   def self.reservations(location)
     location.listings.collect {|l| l.reservations.count}.reduce(:+)
-  end
-
-  def reservation_check(listing, start_date, end_date)
-    listing.reservations.collect do |r|
-      r if (Date.parse(start_date) <= r.checkout) and (Date.parse(end_date) >= r.checkin)
-    end
   end
 
 end
