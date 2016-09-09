@@ -5,24 +5,28 @@ module Checkable
     def highest_ratio_res_to_listings
       ratios = {}
       self.all.each do |location|
-        ratios[location] = reservations(location).to_f / location.listings.count
+        unless location.listings.count == 0
+          ratios[location] = reservations(location).to_f / location.listings.count
+        end
       end
-      ratios.max_by {|k, v| v}.first
+      ratios.max_by {|k, v| v }.first
     end
 
     def most_res
       res_hash = {}
       self.all.each do |location|
-        res_hash[location] = reservations(location)
+        res_hash[location] = reservations(location) unless location.listings.empty?
       end
       res_hash.max_by {|k,v| v}.first
     end
 
     # do class methods only work with other class methods?
     def reservations(location)
-      location.listings.collect {|l| l.reservations.count}.reduce(:+)
+      location.listings.collect do |listing|
+        listing.reservations.count if listing.reservations
+      end.reduce(:+)
     end
-    
+
   end # ./ClassMethods end
 
   module InstanceMethods
