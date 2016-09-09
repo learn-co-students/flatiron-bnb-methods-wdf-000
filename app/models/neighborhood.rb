@@ -1,5 +1,7 @@
 class Neighborhood < ActiveRecord::Base
   include Checkable::InstanceMethods
+  extend Checkable::ClassMethods
+  
   belongs_to :city
   has_many :listings
 
