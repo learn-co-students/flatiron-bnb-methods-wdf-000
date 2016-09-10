@@ -30,10 +30,13 @@ module Checkable
   end # ./ClassMethods end
 
   module InstanceMethods
-
+    # reservation_check returns an array
+    # it checks for overlaping dates of a particular listings reservations using input dates
+    # returns a collection of matching reservations or nil values if they didnt match
+    # NOTE: Can this method be refactored for clarity?
     def reservation_check(listing, start_date, end_date)
-      listing.reservations.collect do |r|
-        r if (Date.parse(start_date) <= r.checkout) and (Date.parse(end_date) >= r.checkin)
+      listing.reservations.collect do |reservation|
+        reservation if (Date.parse(start_date) <= reservation.checkout) and (Date.parse(end_date) >= reservation.checkin)
       end
     end
 
