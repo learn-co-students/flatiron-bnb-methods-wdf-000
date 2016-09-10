@@ -7,6 +7,8 @@ class Reservation < ActiveRecord::Base
   validate :date_inputs, :cannot_reserve_personal_listing
   validate :date_availability, on: :create
 
+  # Custom validation methods
+
   def date_inputs
     # check both date inputs
     if !self.checkin && !self.checkout
@@ -33,13 +35,24 @@ class Reservation < ActiveRecord::Base
     # execute the code below only when no errors exist
     if self.errors.empty?
       listing = Listing.find_by(id: self.listing_id)
-      # reservation_check returns a collection of reservations or nil values if no date conflicts
-      # if no reservations exist returns an empty array
+      # reservation_check checks for matches, returns array of matches or nils
+      # if listing has no reservations returns an empty array
       reservations = reservation_check(listing, self.checkin.strftime, self.checkout.strftime)
-      if !!reservations && !reservations.all? {|reservation| reservation == nil }
+      if !reservations.all? {|reservation| reservation == nil }
         errors.add(:reservation, "error: dates conflict with existing reservation")
       end
     end
+  end
+
+  # Instance methods
+
+  def duration
+    (self.checkout - self.checkin).to_i
+  end
+
+  def total_price
+    listing_price = Listing.find_by(id: self.listing_id).price.to_i
+    listing_price * duration
   end
 
 end
