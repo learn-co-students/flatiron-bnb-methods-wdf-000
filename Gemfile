@@ -36,6 +36,6 @@ group :development, :test do
   gem "simplecov"
   gem "database_cleaner"
   gem "sqlite3"
-  gem "pry"
+  gem "pry-rails"
   gem 'rack_session_access'
 end
