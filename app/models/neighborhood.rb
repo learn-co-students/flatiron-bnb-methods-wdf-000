@@ -2,7 +2,7 @@ class Neighborhood < ActiveRecord::Base
   include Checkable::InstanceMethods
   extend Checkable::ClassMethods
   
-  belongs_to :city
+  belongs_to :city # fk city_id
   has_many :listings
 
   # collects listings that dont have conflicts

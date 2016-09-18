@@ -1,7 +1,7 @@
 class Reservation < ActiveRecord::Base
   include Checkable::InstanceMethods
-  belongs_to :listing
-  belongs_to :guest, :class_name => "User"
+  belongs_to :listing # fk listing_id
+  belongs_to :guest, :class_name => "User" # fk guest_id
   has_one :review
 
   validate :date_inputs, :cannot_reserve_personal_listing
