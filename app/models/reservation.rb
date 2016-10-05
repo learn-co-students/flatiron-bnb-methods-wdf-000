@@ -8,7 +8,7 @@ class Reservation < ActiveRecord::Base
   before_validation :checkin_and_out?
   before_validation :existing_listing?
   has_one :host, through: :listing
-  # has_one :host, through: :listing, :foreign_key => 'host_id'
+  
 
 
 
