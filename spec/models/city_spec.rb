@@ -1,4 +1,4 @@
-describe City do
+exitdescribe City do
   describe 'associations' do 
     it 'has a name' do 
       expect(City.first.name).to eq('NYC')
