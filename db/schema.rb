@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20140710181927) do
     t.datetime "updated_at",                     null: false
     t.string   "status",     default: "pending"
   end
-
+  
   create_table "reviews", force: :cascade do |t|
     t.text     "description"
     t.integer  "rating"
