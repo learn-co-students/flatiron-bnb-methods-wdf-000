@@ -1,0 +1,35 @@
+class City < ActiveRecord::Base
+  has_many :neighborhoods
+  has_many :listings, :through => :neighborhoods
+  has_many :reservations, through: :listings
+
+  def city_openings(checkin,checkout)
+    # requested_range = Date.parse(checkin)..Date.parse(checkout)
+    range1 = Date.parse(checkin)
+    range2 = Date.parse(checkout)
+    arr = []
+    self.listings.each do |listing|
+      tmp = false
+      listing.reservations.each do |reservation|
+        unavailable_range = reservation.checkin..reservation.checkout
+        # if !unavailable_range.overlaps?(requested_range)
+        if unavailable_range.include?(range1) || unavailable_range.include?(range2)
+          tmp = true
+        end
+      end
+      arr << listing unless tmp
+    end
+    arr
+  end
+
+  def self.highest_ratio_res_to_listings
+    binding.pry
+    all.map do |x|
+      binding.pry
+      x.reservations.size/x.listings.size.to_f
+    end
+  end
+end
+
+
+# highest amount of reservations per listing`
