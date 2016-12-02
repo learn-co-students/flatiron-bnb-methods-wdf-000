@@ -1,5 +1,15 @@
 class Neighborhood < ActiveRecord::Base
-  belongs_to :city
+  include Checkable::InstanceMethods
+  extend Checkable::ClassMethods
+  
+  belongs_to :city # fk city_id
   has_many :listings
+
+  # collects listings that dont have conflicts
+  def neighborhood_openings(start_date, end_date)
+    self.listings.collect do |listing|
+      listing if reservation_check(listing, start_date, end_date).all? {|r| r == nil}
+    end
+  end
 
 end
