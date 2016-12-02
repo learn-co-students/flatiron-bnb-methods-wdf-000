@@ -5,4 +5,22 @@ class Listing < ActiveRecord::Base
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
   
+  validates_presence_of :address, :listing_type, :title, :description, :price, :neighborhood_id
+
+  after_save :make_host
+  before_destroy :unmake_host
+
+  def average_review_rating
+    (reviews.map{|review| review.rating}.inject{|sum,i| sum + i}.to_f / reviews.length.to_f)
+  end
+
+  private
+
+  def make_host
+    self.host.update(host: true)
+  end
+
+  def unmake_host
+    self.host.update(host: false) if self.host.listings.length == 1
+  end
 end
